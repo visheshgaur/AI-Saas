@@ -1,8 +1,11 @@
+import { UserButton } from "@clerk/nextjs"
 
-export default function Home() {
+const Dashboard=()=>{
   return (
- <>
-   <p className="text-red-200 text-xl">Hello saas tool  ( protected )</p>
-   </>
-  );
+    <div>
+      <p className="text-red-700"> hello dashboard</p>
+      <UserButton/>
+    </div>
+  )
 }
+export default Dashboard
