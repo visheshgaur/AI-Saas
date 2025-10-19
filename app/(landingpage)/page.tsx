@@ -11,6 +11,7 @@ const landingPage=()=>{
         <div>
            <Link href="/sign-up"><Button className="cursor-pointer">Register</Button></Link> 
         </div>
+        <div className="button">unprotected</div>
         </div>
         </>
     )
