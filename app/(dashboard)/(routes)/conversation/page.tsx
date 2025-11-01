@@ -1,11 +1,10 @@
-
-
 "use client";
 
 import * as z from "zod";
 import { Heading } from "@/components/Heading";
-import { MessageSquare } from "lucide-react";
+import { Loader, MessageSquare } from "lucide-react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { UserAvatar, useUser } from "@clerk/nextjs";
 import { useForm } from "react-hook-form";
 import { formSchema } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +13,12 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import axios from "axios";
+import { Empty } from "@/components/ui/empty";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
 
 type Message = {
   role: "user" | "assistant";
@@ -21,6 +26,7 @@ type Message = {
 };
 
 const ConversationPage = () => {
+  const { user } = useUser();
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -34,37 +40,31 @@ const ConversationPage = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  try {
-    
+    try {
+      const userMessage: Message = {
+        role: "user",
+        content: values.prompt,
+      };
 
-    const userMessage: Message = {
-      role: "user",
-      content: values.prompt,
-    };
+      const newMessages = [...messages, userMessage];
 
-    const newMessages = [...messages, userMessage];
-  
+      const response = await axios.post("/api/conversation", {
+        messages: newMessages,
+      });
 
-    const response = await axios.post("/api/conversation", {
-      messages: newMessages,
-    });
+      const assistantMessage: Message = {
+        role: "assistant",
+        content: response.data.response,
+      };
 
-    
-
-    const assistantMessage: Message = {
-      role: "assistant",
-      content: response.data.response,
-    };
-
-    setMessages((current) => [...current, userMessage, assistantMessage]);
-    form.reset();
-  } catch (error: any) {
-    console.error("Error in onSubmit:", error);
-  } finally {
-    router.refresh();
-  }
-};
-
+      setMessages((current) => [...current, userMessage, assistantMessage]);
+      form.reset();
+    } catch (error: any) {
+      console.error("Error in onSubmit:", error);
+    } finally {
+      router.refresh();
+    }
+  };
 
   return (
     <>
@@ -107,20 +107,35 @@ const ConversationPage = () => {
             </Button>
           </form>
         </Form>
+         
 
         <div className="space-y-4 mt-4 text-gray-800">
+          {messages.length === 0 && !isLoading && (
+            <Empty label="No conversations yet" />
+          )}
+          {isLoading && (
+            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+              {/* This animates the spinner */}
+              <Loader className="h-5 w-5 mr-2 animate-spin" />
+              <p className="text-sm text-muted-foreground">
+                Generating your response...
+              </p>
+            </div>
+          )}
           <div className="flex flex-col-reverse gap-y-4">
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`p-3 rounded-lg ${
+                className={`p-3 rounded-lg flex gap-2 ${
                   message.role === "user"
                     ? "bg-violet-100 text-gray-900"
                     : "bg-gray-100 text-gray-800"
                 }`}
               >
                 <strong>
-                  {message.role === "user" ? "You: " : "Gemini: "}
+                  {message.role === "user"
+                    ? <UserAvatar/>
+                    : "Genius :  "}
                 </strong>
                 {message.content}
               </div>
@@ -133,6 +148,3 @@ const ConversationPage = () => {
 };
 
 export default ConversationPage;
-
-
-
