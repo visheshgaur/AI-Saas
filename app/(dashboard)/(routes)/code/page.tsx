@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { Heading } from "@/components/Heading";
-import { Loader, MessageSquare } from "lucide-react";
+import { Code, Loader } from "lucide-react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { UserAvatar, useUser } from "@clerk/nextjs";
 import { useForm } from "react-hook-form";
@@ -14,18 +14,17 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import axios from "axios";
 import { Empty } from "@/components/ui/empty";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 
 type Message = {
   role: "user" | "assistant";
   content: string;
 };
 
-const ConversationPage = () => {
+const CodeGeneration = () => {
   const { user } = useUser();
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -48,7 +47,7 @@ const ConversationPage = () => {
 
       const newMessages = [...messages, userMessage];
 
-      const response = await axios.post("/api/conversation", {
+      const response = await axios.post("/api/code", {
         messages: newMessages,
       });
 
@@ -71,11 +70,11 @@ const ConversationPage = () => {
     <>
       <div>
         <Heading
-          title="Conversation"
-          description="Our most advanced Gemini-powered conversation model"
-          icon={MessageSquare}
-          iconColor="text-violet-800"
-          bgColor="bg-violet-500/10"
+          title="Code Generation"
+          description="Our most advanced code Generation model"
+          icon={Code}
+          iconColor="text-green-800"
+          bgColor="bg-gray-500/10"
         />
       </div>
 
@@ -108,7 +107,6 @@ const ConversationPage = () => {
             </Button>
           </form>
         </Form>
-         
 
         <div className="space-y-4 mt-4 text-gray-800">
           {messages.length === 0 && !isLoading && (
@@ -123,7 +121,7 @@ const ConversationPage = () => {
               </p>
             </div>
           )}
-          <div className="flex flex-col-reverse gap-y-4">
+          {/* <div className="flex flex-col-reverse gap-y-4">
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -141,6 +139,53 @@ const ConversationPage = () => {
                 {message.content}
               </div>
             ))}
+          </div> */}
+          <div className="flex flex-col-reverse gap-y-4">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`p-3 rounded-lg flex gap-2 flex-wrap ${
+                  message.role === "user"
+                    ? "bg-violet-100 text-gray-900"
+                    : "bg-gray-100 text-gray-800"
+                }`}
+              >
+                <strong>
+                  {message.role === "user" ? <UserAvatar /> : "Genius :  "}
+                </strong>
+
+                {message.role === "user" ? (
+                  
+                  <div className="whitespace-pre-wrap break-words min-w-0">
+                    {message.content}
+                  </div>
+                ) : (
+                 
+                  <div className="flex flex-col min-w-0">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      rehypePlugins={[rehypeHighlight]}
+                      components={{
+                        pre: ({ node, ...props }) => (
+                          <div className="overflow-auto w-full my-2 bg-gray-900 text-white p-4 rounded-lg">
+                            <pre {...props} />
+                          </div>
+                        ),
+                        p: ({ node, ...props }) => (
+                          
+                          <p
+                            className="whitespace-pre-wrap break-words"
+                            {...props}
+                          />
+                        ),
+                      }}
+                    >
+                      {message.content}
+                    </ReactMarkdown>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -148,4 +193,4 @@ const ConversationPage = () => {
   );
 };
 
-export default ConversationPage;
+export default CodeGeneration;
