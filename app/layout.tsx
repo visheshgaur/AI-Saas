@@ -8,6 +8,7 @@ import {
   UserButton,
 } from '@clerk/nextjs'
 import { Geist, Geist_Mono } from 'next/font/google'
+import 'highlight.js/styles/github-dark.css';
 import './globals.css'
 
 const geistSans = Geist({
