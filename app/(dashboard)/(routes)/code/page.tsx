@@ -92,7 +92,7 @@ const CodeGeneration = () => {
                     <Input
                       className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent text-gray-800"
                       disabled={isLoading}
-                      placeholder="Enter your prompt"
+                      placeholder="Enter your prompt for generating a code"
                       {...field}
                     />
                   </FormControl>
