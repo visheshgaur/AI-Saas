@@ -114,7 +114,7 @@ const CodeGeneration = () => {
           )}
           {isLoading && (
             <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
-              {/* This animates the spinner */}
+              {/* animates spinner */}
               <Loader className="h-5 w-5 mr-2 animate-spin" />
               <p className="text-sm text-muted-foreground">
                 Generating your response...
