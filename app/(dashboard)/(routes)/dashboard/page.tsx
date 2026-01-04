@@ -3,7 +3,11 @@
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs"
+<<<<<<< HEAD
 import { ArrowRight, Code, ImageIcon, MessageSquare, Music, VideoIcon } from "lucide-react";
+=======
+import { ArrowRight, Code, ImageIcon, MessageSquare, Music, Shrink, VideoIcon } from "lucide-react";
+>>>>>>> 71d85186eaa83ab7333cc73f7041d1b5dd656281
 import { useRouter } from "next/navigation";
 
 
@@ -38,6 +42,15 @@ const tools=[
     color:"text-green-700",
     bgColor:"bg-violet-500/10"
     },
+<<<<<<< HEAD
+=======
+    {label:'Text Summarizer',
+    icon:Shrink,
+    href:"/summarize",
+    color:"text-red-700",
+    bgColor:"bg-red-500/10"
+    }
+>>>>>>> 71d85186eaa83ab7333cc73f7041d1b5dd656281
 ]
 
 const Dashboard=()=>{
