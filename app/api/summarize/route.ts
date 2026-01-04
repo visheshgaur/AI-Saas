@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import Bytez from "bytez.js";
 
-const bytez = new Bytez("0421add14657a8713f53bae046ab2689");
+const apiKey = process.env.BYTEZ_API_KEY!;
+
+const bytez = new Bytez(apiKey);
 
 export async function POST(req: Request) {
   try {

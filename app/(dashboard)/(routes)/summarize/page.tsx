@@ -20,14 +20,11 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-};
+
 
 const SummarizePage = () => {
-  const { user } = useUser();
-  const router = useRouter();
+  // const { user } = useUser();
+  // const router = useRouter();
   const [summarized, setSummarized] = useState<string | null>(null);
 
 
