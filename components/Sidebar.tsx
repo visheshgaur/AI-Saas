@@ -4,11 +4,7 @@ import { usePathname } from "next/navigation";
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-<<<<<<< HEAD
-import { Code, ImageIcon, LayoutDashboard, MessagesSquare, Music, Settings, VideoIcon } from "lucide-react";
-=======
 import { Code, ImageIcon, LayoutDashboard, MessagesSquare, Music, Settings, Shrink, VideoIcon } from "lucide-react";
->>>>>>> 71d85186eaa83ab7333cc73f7041d1b5dd656281
 
 const montserrat = Montserrat({
   weight: "600",
@@ -46,18 +42,15 @@ const routes=[
     href:"/code",
     color:"text-green-700"
     },
-<<<<<<< HEAD
-=======
     {label:'Summarizer',
     icon:Shrink,
     href:"/summarize",
     color:"text-red-700"
     },
->>>>>>> 71d85186eaa83ab7333cc73f7041d1b5dd656281
     {label:'Settings',
     icon:Settings,
     href:"/settings",
-   
+    
     },
 ]
 const Sidebar = () => {
@@ -82,31 +75,28 @@ const Sidebar = () => {
         </Link>
         <div className="space-y-4">
             {routes.map((route)=>(
-            // Inside your Sidebar component, within the routes.map:
-
-// Inside your Sidebar component, within the routes.map:
-
+            
 <Link
-  href={route.href}
-  key={route.href}
-  className={cn(
-    "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer rounded-lg transition", 
-    
-    // 👇 NEW Hover Background: Apply subtle emerald background on hover
-    pathname !== route.href && "hover:bg-emerald-400/10",
-    
-    // 👇 NEW Active/Inactive Colors:
-    pathname === route.href 
-      // ACTIVE: Pure white text on a subtle emerald background
-      ? "text-white bg-emerald-400/10" 
-      // INACTIVE: Soft grey text (no custom background)
-      : "text-zinc-400"          
-  )}
+  href={route.href}
+  key={route.href}
+  className={cn(
+    "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer rounded-lg transition", 
+    
+    // 👇 NEW Hover Background: Apply subtle emerald background on hover
+    pathname !== route.href && "hover:bg-emerald-400/10",
+    
+    // 👇 NEW Active/Inactive Colors:
+    pathname === route.href 
+      // ACTIVE: Pure white text on a subtle emerald background
+      ? "text-white bg-emerald-400/10" 
+      // INACTIVE: Soft grey text (no custom background)
+      : "text-zinc-400"          
+  )}
 >
-  <div className="flex items-center flex-1">
-    <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
-    {route.label}
-  </div>
+  <div className="flex items-center flex-1">
+    <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
+    {route.label}
+  </div>
 </Link>
         ))}
         </div>
