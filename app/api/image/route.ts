@@ -87,11 +87,7 @@ export async function POST(req: Request) {
       console.error("[BYTEZ_MODEL_ERROR]:", error);
       return new NextResponse("Model Error", { status: 500 });
     }
-    else{
-      console.log(output);
-      
-    }
-
+    
     return NextResponse.json({ images: [output] });
 
   } catch (error) {
