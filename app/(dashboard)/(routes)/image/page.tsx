@@ -15,6 +15,7 @@ import axios from "axios";
 import { Empty } from "@/components/ui/empty";
 import { Card, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
+import { toast } from "sonner";
 
 const ImagePage = () => {
   const router = useRouter();
@@ -44,7 +45,15 @@ const ImagePage = () => {
       
       form.reset();
     } catch (error: any) {
-      console.error("Error in onSubmit:", error);
+      // console.error("Error in onSubmit:", error);
+      if(error?.response?.status===429){
+        toast.error("Free Tier Limit Reached");
+      }
+      else{
+        toast.error("Something Went Wrong");
+        console.log("Api error",error);
+        
+      }
     } finally {
       router.refresh();
     }
@@ -104,7 +113,7 @@ const ImagePage = () => {
         )}
 
         {images.length === 0 && !isLoading && (
-          <Empty label="No images generated." />
+          <Empty label="No images generated..." />
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">

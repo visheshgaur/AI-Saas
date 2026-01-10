@@ -209,67 +209,143 @@ const MusicPage = () => {
       router.refresh();
     }
   };
-
-  return (
-    <div className="h-full p-4 space-y-8">
-      <Heading
-        title="Music Generation"
-        description="Turn your prompt into music."
-        icon={Music}
-        iconColor="text-orange-700"
-        bgColor="bg-orange-700/10"
-      />
-      <div className="px-4 lg:px-8">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
-          >
-            <FormField
-              name="prompt"
-              render={({ field }) => (
-                <FormItem className="col-span-12 lg:col-span-10">
-                  <FormControl className="m-0 p-0">
-                    <Input
-                      className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent text-black" 
-                      disabled={isLoading}
-                      placeholder="Piano solo"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <Button
-              className="col-span-12 lg:col-span-2 w-full cursor-pointer"
-              disabled={isLoading}
-            >
-              {isLoading ? "Generating..." : "Generate"}
-            </Button>
-          </form>
-        </Form>
+return (
+    // 1. RELATIVE PARENT: Holds everything
+    <div className="relative h-full">
+      
+      {/* 2. THE OVERLAY: Sits on top and blurs everything behind it */}
+      <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-lg p-2">
+        <p className="sm:text-2xl md:text-3xl lg:text-3xl font-bold text-black-600 drop-shadow-sm align-center ">
+          This will be launching super soon 🚀
+        </p>
       </div>
-      <div className="space-y-4 mt-4 px-4 lg:px-8">
-        {isLoading && (
-          <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
-            <p className="text-center">
-            <Loader className="h-5 w-5 mr-2 animate-spin" />
-            Generating Your Music
-            </p>
-          </div>
-        )}
-        {!music && !isLoading && <Empty label="No music generated." />}
+
+      {/* 3. THE CONTENT: Your existing Music UI (Sits behind the blur) */}
+      <div className="h-full p-4 space-y-8">
+        <Heading
+          title="Music Generation"
+          description="Turn your prompt into music."
+          icon={Music}
+          iconColor="text-emerald-500"
+          bgColor="bg-emerald-500/10"
+        />
+        <div className="px-4 lg:px-8">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
+            >
+              <FormField
+                name="prompt"
+                render={({ field }) => (
+                  <FormItem className="col-span-12 lg:col-span-10">
+                    <FormControl className="m-0 p-0">
+                      <Input
+                        className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent text-black"
+                        disabled // Keep disabled as requested
+                        placeholder="Piano solo"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <Button
+                className="col-span-12 lg:col-span-2 w-full"
+                disabled // Keep disabled
+              >
+                {isLoading ? "Generating..." : "Generate"}
+              </Button>
+            </form>
+          </Form>
+        </div>
         
-        {music && (
-          <div className="w-full mt-8">
-            <audio controls className="w-full mt-8">
-              <source src={music} />
-            </audio>
-          </div>
-        )}
+        <div className="space-y-4 mt-4 px-4 lg:px-8">
+          {isLoading && (
+            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+              <p className="text-center flex items-center">
+                <Loader className="h-5 w-5 mr-2 animate-spin" />
+                Generating Your Music
+              </p>
+            </div>
+          )}
+          {!music && !isLoading && <Empty label="No music generated." />}
+
+          {music && (
+            <div className="w-full mt-8">
+              <audio controls className="w-full mt-8">
+                <source src={music} />
+              </audio>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
+  // return (
+  //   <div className="w-full h-full bg-red-50 text-2xl font-medium text-red-600 justify-center">
+  //     <p>This will be launching super soon</p>
+  //     <div className="h-full p-4 space-y-8">
+  //     <Heading
+  //       title="Music Generation"
+  //       description="Turn your prompt into music."
+  //       icon={Music}
+  //       iconColor="text-orange-700"
+  //       bgColor="bg-orange-700/10"
+  //     />
+  //     <div className="px-4 lg:px-8">
+  //       <Form {...form}>
+  //         <form
+  //           onSubmit={form.handleSubmit(onSubmit)}
+  //           className="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
+  //         >
+  //           <FormField
+  //             name="prompt"
+  //             render={({ field }) => (
+  //               <FormItem className="col-span-12 lg:col-span-10">
+  //                 <FormControl className="m-0 p-0">
+  //                   <Input
+  //                     className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent text-black" 
+  //                     disabled
+  //                     placeholder="Piano solo"
+  //                     {...field}
+                      
+  //                   />
+  //                 </FormControl>
+  //               </FormItem>
+  //             )}
+  //           />
+  //           <Button
+  //             className="col-span-12 lg:col-span-2 w-full cursor-pointer"
+  //             disabled
+  //           >
+  //             {isLoading ? "Generating..." : "Generate"}
+  //           </Button>
+  //         </form>
+  //       </Form>
+  //     </div>
+  //     <div className="space-y-4 mt-4 px-4 lg:px-8">
+  //       {isLoading && (
+  //         <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+  //           <p className="text-center">
+  //           <Loader className="h-5 w-5 mr-2 animate-spin" />
+  //           Generating Your Music
+  //           </p>
+  //         </div>
+  //       )}
+  //       {!music && !isLoading && <Empty label="No music generated." />}
+        
+  //       {music && (
+  //         <div className="w-full mt-8">
+  //           <audio controls className="w-full mt-8">
+  //             <source src={music} />
+  //           </audio>
+  //         </div>
+  //       )}
+  //     </div>
+  //   </div>
+  //   </div>
+  // );
 };
 
 export default MusicPage;

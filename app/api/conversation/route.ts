@@ -1,6 +1,7 @@
-
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { GoogleGenAI, Content } from "@google/genai";
+import { checkApiLimit,increaseApiLimit } from "@/lib/rate-limit";
 
 // 1. Initialize the client. It automatically finds the API key.
 const ai = new GoogleGenAI({}); 
@@ -15,7 +16,10 @@ type FrontendMessage = {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        
+        const {userId}=await auth()
+        if(!userId){
+            return new NextResponse("Unauthorized",{status:401});
+        }
         // 2. Read the "messages" array from the request body
         const frontendMessages: FrontendMessage[] = body.messages || [];
 
@@ -23,6 +27,13 @@ export async function POST(req: Request) {
             return new NextResponse("Messages are required", { status: 400 });
         }
 
+        const success=await checkApiLimit(userId);
+
+        if(!success){
+           
+            return new NextResponse("Free tier ended",{status:429});
+        }
+        await increaseApiLimit(userId)
         // 3. Map the roles: Frontend 'assistant' -> Gemini 'model'
         const contents: Content[] = frontendMessages.map(msg => ({
             role: msg.role === 'assistant' ? 'model' : 'user', 

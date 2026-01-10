@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import Bytez from "bytez.js";
-
+import { checkApiLimit, increaseApiLimit } from "@/lib/rate-limit";
 const apiKey = process.env.BYTEZ_API_KEY!;
 
 const bytez = new Bytez(apiKey);
@@ -19,7 +19,11 @@ export async function POST(req: Request) {
     if (!prompt) {
       return new NextResponse("Prompt is required", { status: 400 });
     }
-
+    const success=await checkApiLimit(userId);
+    if(!success){
+      return new NextResponse("Free tier reached",{status:429});
+    }
+    await increaseApiLimit(userId)
     const model = bytez.model("ali-vilab/text-to-video-ms-1.7b");
 
    

@@ -19,6 +19,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import { toast } from "sonner";
 
 type Message = {
   role: "user" | "assistant";
@@ -60,8 +61,15 @@ const ConversationPage = () => {
       setMessages((current) => [...current, userMessage, assistantMessage]);
       form.reset();
     } catch (error: any) {
-      console.error("Error in onSubmit:", error);
-      alert(error);
+      if(error?.response?.status===429){
+        toast.error("Free Tier Limit Reached")
+      }
+      else{
+        toast.error("Something Went Wrong");
+        console.error("API Error:", error);
+      }
+      
+      
     } finally {
       router.refresh();
     }
@@ -112,7 +120,7 @@ const ConversationPage = () => {
 
         <div className="space-y-4 mt-4 text-gray-800">
           {messages.length === 0 && !isLoading && (
-            <Empty label="No conversations yet" />
+            <Empty label="No conversations yet.." />
           )}
           {isLoading && (
             <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">

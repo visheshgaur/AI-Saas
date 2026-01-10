@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import { toast } from "sonner";
 
 type Message = {
   role: "user" | "assistant";
@@ -59,8 +60,15 @@ const CodeGeneration = () => {
       setMessages((current) => [...current, userMessage, assistantMessage]);
       form.reset();
     } catch (error: any) {
-      console.error("Error in onSubmit:", error);
-      alert(error);
+      if(error?.response?.status===429){
+         toast.error("Free Tier Limit Reached")
+      }
+      else{
+        toast.error("Something Went Wrong");
+        console.log("Api error",error)
+      }
+      // console.error("Error in onSubmit:", error);
+      // alert(error);
     } finally {
       router.refresh();
     }
@@ -110,7 +118,7 @@ const CodeGeneration = () => {
 
         <div className="space-y-4 mt-4 text-gray-800">
           {messages.length === 0 && !isLoading && (
-            <Empty label="No conversations yet" />
+            <Empty label="No Code Generated yet ..." />
           )}
           {isLoading && (
             <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
@@ -121,25 +129,7 @@ const CodeGeneration = () => {
               </p>
             </div>
           )}
-          {/* <div className="flex flex-col-reverse gap-y-4">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`p-3 rounded-lg flex gap-2 ${
-                  message.role === "user"
-                    ? "bg-violet-100 text-gray-900"
-                    : "bg-gray-100 text-gray-800"
-                }`}
-              >
-                <strong>
-                  {message.role === "user"
-                    ? <UserAvatar/>
-                    : "Genius :  "}
-                </strong>
-                {message.content}
-              </div>
-            ))}
-          </div> */}
+          
           <div className="flex flex-col-reverse gap-y-4">
             {messages.map((message, index) => (
               <div

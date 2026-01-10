@@ -2,6 +2,8 @@
 
 import { NextResponse } from "next/server";
 import { GoogleGenAI, Content } from "@google/genai";
+import { auth } from "@clerk/nextjs/server";
+import { checkApiLimit, increaseApiLimit } from "@/lib/rate-limit";
 
 // 1. Initialize the client
 const ai = new GoogleGenAI({});
@@ -30,13 +32,21 @@ const systemPrompt: Content[] = [
 
 export async function POST(req: Request) {
   try {
+    const {userId}=await auth();
     const body = await req.json();
     const frontendMessages: FrontendMessage[] = body.messages || [];
+    if(!userId){
+      return new NextResponse("Unauthorized",{status:401});
+    }
 
     if (frontendMessages.length === 0) {
       return new NextResponse("Messages are required", { status: 400 });
     }
-
+    const success=await checkApiLimit(userId)
+    if(!success){
+      return new NextResponse("Free Tier Ended",{status:429});
+    }
+    await increaseApiLimit(userId)
     // 3. Map the roles: Frontend 'assistant' -> Gemini 'model'
     const chatHistory: Content[] = frontendMessages.map(msg => ({
       role: msg.role === 'assistant' ? 'model' : 'user',

@@ -1,37 +1,44 @@
 "use client";
 
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button"; // Adjusted import path if needed
 import { Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger,SheetTitle } from "./ui/sheet";
-import Sidebar from "./Sidebar";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import Sidebar from "@/components/Sidebar"; // Adjusted import path
 import { useEffect, useState } from "react";
 
-const MobileSidebar = () => {
-    const [isMounted,setIsMounted]=useState(false);
+// 1. Define the interface
+interface MobileSidebarProps {
+    apiLimitCount: number;
+}
 
-    useEffect(()=>{
+// 2. Accept the prop
+const MobileSidebar = ({ apiLimitCount = 0 }: MobileSidebarProps) => {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
         setIsMounted(true);
-    },[])
+    }, []);
 
-    if(!isMounted){
+    if (!isMounted) {
         return null;
     }
 
     return (
-        <div className="mobile-sidebar">
-           <Sheet>
-               {/* 👇 Add asChild to SheetTrigger */}
-               <SheetTrigger asChild> 
-                   <Button variant="ghost" size="icon" className="md:hidden"> 
-                       <Menu/>
-                   </Button>
-               </SheetTrigger>
-               <SheetContent side="left" className="p-0">
+        <Sheet>
+            <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                    <Menu />
+                </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0">
                 <SheetTitle className="sr-only">Main Navigation</SheetTitle>
-                   <Sidebar/>
-               </SheetContent>
-           </Sheet>
-        </div>
-    )
+                
+                
+                <Sidebar apiLimitCount={apiLimitCount} />
+                
+            </SheetContent>
+        </Sheet>
+    );
 }
+
 export default MobileSidebar;

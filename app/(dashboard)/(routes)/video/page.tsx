@@ -19,6 +19,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import { toast } from "sonner";
 
 
 
@@ -45,7 +46,14 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
     form.reset();
   } catch (error: any) {
-    console.error("Error:", error);
+    if(error?.response?.status===429){
+      toast.error("Free Tier Reached");
+    }
+    else{
+      toast.error("Something Went Wrong");
+      console.log("Api error",error);
+      
+    }
   }
 };
 
@@ -95,7 +103,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
         <div className="space-y-4 mt-4 text-gray-800">
           {!video && !isLoading && (
-            <Empty label="No Music yet" />
+            <Empty label="No Video Generated yet..." />
           )}
           {isLoading && (
             <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
