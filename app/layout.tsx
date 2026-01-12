@@ -10,7 +10,7 @@ import {
 import { Geist, Geist_Mono } from 'next/font/google'
 import 'highlight.js/styles/github-dark.css';
 import './globals.css'
-
+import { ModalProvider } from '@/components/Modal-Provider';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -35,6 +35,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <ModalProvider/>
           {children}
         </body>
       </html>
