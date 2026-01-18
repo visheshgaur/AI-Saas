@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     }
     const success=await checkApiLimit(userId)
     if(!success){
-      return new NextResponse("Free Tier Ended",{status:429});
+      return new NextResponse("Free Tier Ended",{status:403});
     }
     await increaseApiLimit(userId)
     // 3. Map the roles: Frontend 'assistant' -> Gemini 'model'

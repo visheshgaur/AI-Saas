@@ -101,6 +101,7 @@
     Dialog,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
     } from "./ui/dialog";
@@ -113,9 +114,11 @@
     Music,
     Shrink,
     VideoIcon,
+    Zap,
     } from "lucide-react";
     import { Card } from "./ui/card";
     import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
     const tools = [
     {
         label: "Conversation",
@@ -173,19 +176,29 @@
                 {tools.map((tool) => (
                 <Card
                     key={tool.label}
-                    className="items-center flex justify-between p-3 border-black/5"
+                    className="flex flex-row  items-center p-3 border-black/5"
                 >
-                    <div className="flex  items-center gap-x-4 ">
+                    <div className="flex items-center  gap-x-4  w-full ">
                     <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>
                         <tool.icon className={cn("w-6 h-6 ", tool.color)} />
                     </div>
                      <div>{tool.label}</div>
                     </div>
+                    <div className="flex items-center  justify-end">
                    <Check/>
+                    </div>
+                   
                 </Card>
                 ))}
             </div>
             </DialogHeader>
+            <DialogFooter>
+                <Button size="lg" variant="premium" className="border-none w-full cursor-pointer">
+                    
+                    Upgrade Now
+                    <Zap className="w-4 h-4 ml-1 fill-white"></Zap>
+                </Button>
+            </DialogFooter>
         </DialogContent>
         </Dialog>
     );

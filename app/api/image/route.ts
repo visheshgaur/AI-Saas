@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
     const success=await checkApiLimit(userId);
     if(!success){
-      return new NextResponse("Free tier Reached",{status:429});
+      return new NextResponse("Free tier Reached",{status:403});
     }
     await increaseApiLimit(userId)
 

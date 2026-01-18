@@ -20,6 +20,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { toast } from "sonner";
+import { useProModal } from "@/hooks/pro-modal-ui";
 
 
 
@@ -27,7 +28,7 @@ const SummarizePage = () => {
   // const { user } = useUser();
   // const router = useRouter();
   const [summarized, setSummarized] = useState<string | null>(null);
-
+  const proModal=useProModal()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,8 +47,9 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
     form.reset();
   } catch (error: any) {
-    if(error?.response?.status===429){
+    if(error?.response?.status===403){
       toast.error("Free tier Limit Reached");
+      proModal.onOpen()
     }
     else{
       toast.error("Something went Wrong");

@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     }
     const success=await checkApiLimit(userId);
     if(!success){
-      return new NextResponse("Free tier reached",{status:429});
+      return new NextResponse("Free tier reached",{status:403});
     }
     await increaseApiLimit(userId)
     const model = bytez.model("ali-vilab/text-to-video-ms-1.7b");

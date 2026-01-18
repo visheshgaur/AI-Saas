@@ -19,6 +19,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import { toast } from "sonner";
+import { useProModal } from "@/hooks/pro-modal-ui";
 
 type Message = {
   role: "user" | "assistant";
@@ -29,6 +30,7 @@ const CodeGeneration = () => {
   const { user } = useUser();
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
+  const proModal=useProModal()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,8 +62,9 @@ const CodeGeneration = () => {
       setMessages((current) => [...current, userMessage, assistantMessage]);
       form.reset();
     } catch (error: any) {
-      if(error?.response?.status===429){
+      if(error?.response?.status===403){
          toast.error("Free Tier Limit Reached")
+         proModal.onOpen()
       }
       else{
         toast.error("Something Went Wrong");

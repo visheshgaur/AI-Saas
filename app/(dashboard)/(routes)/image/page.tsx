@@ -16,10 +16,12 @@ import { Empty } from "@/components/ui/empty";
 import { Card, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 import { toast } from "sonner";
+import { useProModal } from "@/hooks/pro-modal-ui";
 
 const ImagePage = () => {
   const router = useRouter();
   const [images, setImages] = useState<string[]>([]);
+  const proModal=useProModal()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,8 +48,9 @@ const ImagePage = () => {
       form.reset();
     } catch (error: any) {
       // console.error("Error in onSubmit:", error);
-      if(error?.response?.status===429){
+      if(error?.response?.status===403){
         toast.error("Free Tier Limit Reached");
+        proModal.onOpen()
       }
       else{
         toast.error("Something Went Wrong");

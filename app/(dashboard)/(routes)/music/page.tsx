@@ -177,11 +177,12 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Empty } from "@/components/ui/empty";
 
 import { formSchema } from "./constants";
+import { useProModal } from "@/hooks/pro-modal-ui";
 
 const MusicPage = () => {
   const router = useRouter();
   const [music, setMusic] = useState<string | undefined>();
-
+  const proModal=useProModal()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

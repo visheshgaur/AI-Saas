@@ -20,6 +20,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { toast } from "sonner";
+import { useProModal } from "@/hooks/pro-modal-ui";
 
 type Message = {
   role: "user" | "assistant";
@@ -27,6 +28,7 @@ type Message = {
 };
 
 const ConversationPage = () => {
+  const proModal=useProModal()
   const { user } = useUser();
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -61,8 +63,9 @@ const ConversationPage = () => {
       setMessages((current) => [...current, userMessage, assistantMessage]);
       form.reset();
     } catch (error: any) {
-      if(error?.response?.status===429){
-        toast.error("Free Tier Limit Reached")
+      if(error?.response?.status===403){
+        toast.error("Free Tier Limit Reached");
+        proModal.onOpen()
       }
       else{
         toast.error("Something Went Wrong");
