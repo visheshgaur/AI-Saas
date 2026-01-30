@@ -45,14 +45,15 @@ import MobileSidebar from "./Mobile-Sidebar";
 // 1. Define Interface
 interface NavbarProps {
     apiLimitCount: number;
+    isPro:boolean
 }
 
 // 2. Accept Prop
-const Navbar = ({ apiLimitCount = 0 }: NavbarProps) => {
+const Navbar = ({ apiLimitCount = 0 ,isPro}: NavbarProps) => {
     return (
         <div className="flex items-center p-4">
             {/* 3. Pass to MobileSidebar */}
-            <MobileSidebar apiLimitCount={apiLimitCount} />
+            <MobileSidebar isPro={isPro} apiLimitCount={apiLimitCount} />
             
             <div className="flex w-full justify-end">
                  <ClientUserButton />

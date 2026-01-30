@@ -5,18 +5,21 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Zap } from "lucide-react";
-import { MAX_FREE_COUNTS } from "@/lib/rate-limit";
+import { MAX_FREE_COUNTS } from "@/lib/constant";
 import { ProModal } from "./Pro-modal";
 import { useProModal } from "@/hooks/pro-modal-ui";
+import { is } from "zod/v4/locales";
 
 interface FreeCounterProps {
   apiLimitCount: number;
+  isPro:boolean
 }
 
 export const FreeCounter = ({
-  apiLimitCount = 0
+  apiLimitCount = 0,
+  isPro=false
 }: FreeCounterProps) => {
-  // Prevent hydration errors
+  
   const [mounted, setMounted] = useState(false);
   const proModal=useProModal();
 
@@ -25,6 +28,9 @@ export const FreeCounter = ({
   }, []);
 
   if (!mounted) return null;
+  if(isPro){
+    return null
+  }
 
   return (
     <div className="px-3">

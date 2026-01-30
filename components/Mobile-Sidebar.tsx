@@ -9,10 +9,11 @@ import { useEffect, useState } from "react";
 // 1. Define the interface
 interface MobileSidebarProps {
     apiLimitCount: number;
+    isPro:boolean
 }
 
 // 2. Accept the prop
-const MobileSidebar = ({ apiLimitCount = 0 }: MobileSidebarProps) => {
+const MobileSidebar = ({ apiLimitCount = 0,isPro }: MobileSidebarProps) => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {

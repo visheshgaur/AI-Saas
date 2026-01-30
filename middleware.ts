@@ -1,21 +1,29 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-// Define which routes should be protected
-const isProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
+// 1. Define routes that MUST be protected
+const isProtectedRoute = createRouteMatcher([
+  "/dashboard(.*)",
+]);
+
+// 2. Define routes that MUST be public (Explicitly allow Webhooks)
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/api/webhook", // 👈 This is the key fix
+]);
 
 export default clerkMiddleware(async (auth, req) => {
-  // Check if current request path matches a protected route
+  // If it's a protected route and NOT a public route, enforce login
   if (isProtectedRoute(req)) {
-    await auth.protect({
-      // Redirect unauthenticated users to absolute sign-up URL
-      unauthenticatedUrl: new URL("/sign-up", req.url).toString(),
-    });
+    await auth.protect();
   }
 });
 
 export const config = {
   matcher: [
-    // Run Clerk middleware on all routes except static assets
+    // Skip Next.js internals and all static files
     "/((?!_next|.*\\..*|favicon.ico).*)",
+    // Always run for API routes
+    "/(api|trpc)(.*)",
   ],
 };
