@@ -22,7 +22,7 @@ export async function GET() {
 
     // 1. Create a Stripe Checkout Session
     const stripeSession = await stripe.checkout.sessions.create({
-      success_url: `${settingsUrl}/`, // Where to go after payment
+      success_url: `${settingsUrl}/dashboard`, // Where to go after payment
       cancel_url: `${settingsUrl}/`,         // Where to go if they cancel
       payment_method_types: ["card"],
       mode: "subscription",                  // or "payment" for one-time

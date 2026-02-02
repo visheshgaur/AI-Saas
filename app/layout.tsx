@@ -11,6 +11,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import 'highlight.js/styles/github-dark.css';
 import './globals.css'
 import { ModalProvider } from '@/components/Modal-Provider';
+import { CrispProvider } from '@/components/CrispProvider';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -34,6 +35,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <CrispProvider/>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <ModalProvider/>
           {children}
