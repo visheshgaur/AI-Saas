@@ -5,7 +5,7 @@ import Stripe from "stripe";
 
 // Initialize Stripe with your Secret Key (sk_test_...)
 const stripe = new Stripe(process.env.STRIPE_API_KEY!, {
-  apiVersion: "2026-01-28.clover", // Use latest version
+  apiVersion: "2026-02-25.clover", // Use latest version
   typescript: true,
 });
 

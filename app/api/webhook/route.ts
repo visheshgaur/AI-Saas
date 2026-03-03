@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { createClerkClient } from "@clerk/nextjs/server";
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY!, {
-  apiVersion: "2026-01-28.clover", // Ensure this matches your installed version
+  apiVersion: "2026-02-25.clover",
   typescript: true,
 });
 
