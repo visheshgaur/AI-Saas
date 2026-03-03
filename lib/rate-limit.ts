@@ -72,51 +72,54 @@ const redis = Redis.fromEnv();
 export const increaseApiLimit = async (userId: string) => {
   if (!userId) return;
 
-  // 👇 FIX: Called with NO arguments (it finds user automatically now)
   const isPro = await checkSubscription();
-  
-  if (isPro) {
-    return; // Do not count usage for Pro users
-  }
+  if (isPro) return;
 
-  const userApiLimitKey = `user_api_limit:${userId}`;
+  try {
+    const userApiLimitKey = `user_api_limit:${userId}`;
+    const count = await redis.incr(userApiLimitKey);
 
-  // Increment the counter only for free users
-  const count = await redis.incr(userApiLimitKey);
-
-  // If this is the first time (count is 1), set it to expire in 24 hours
-  if (count === 1) {
-    await redis.expire(userApiLimitKey, 86400); // 24 hours in seconds
+    if (count === 1) {
+      await redis.expire(userApiLimitKey, 86400);
+    }
+  } catch (error) {
+    console.log("REDIS ERROR:", error);
   }
 };
 
 export const checkApiLimit = async (userId: string) => {
   if (!userId) return false;
 
-  // 👇 FIX: Called with NO arguments
   const isPro = await checkSubscription();
+  if (isPro) return true;
 
-  if (isPro) {
-    return true; // Unlimited access for Pro
+  try {
+    const userApiLimitKey = `user_api_limit:${userId}`;
+    const count = await redis.get(userApiLimitKey);
+
+    if (!count || Number(count) < MAX_FREE_COUNTS1) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.log("REDIS ERROR:", error);
+    return true; // fail open instead of breaking app
   }
-
-  const userApiLimitKey = `user_api_limit:${userId}`;
-  const count = await redis.get(userApiLimitKey);
-
-  if (!count || Number(count) < MAX_FREE_COUNTS1) {
-    return true;
-  }
-  
-  return false;
 };
 
 export const getApiLimitCount = async (userId: string) => {
   if (!userId) return 0;
 
-  const userApiLimitKey = `user_api_limit:${userId}`;
-  const count = await redis.get(userApiLimitKey);
+  try {
+    const userApiLimitKey = `user_api_limit:${userId}`;
+    const count = await redis.get(userApiLimitKey);
 
-  if (!count) return 0;
+    if (!count) return 0;
 
-  return Number(count);
+    return Number(count);
+  } catch (error) {
+    console.log("REDIS ERROR:", error);
+    return 0; // prevent dashboard crash
+  }
 };

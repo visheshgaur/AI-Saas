@@ -1,20 +1,21 @@
+import LandingBanner from "@/components/LandingBanner";
+import LandingFooter from "@/components/LandingFooter";
+import LandingNavbar from "@/components/LandingNavbar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-const landingPage=()=>{
-    return(
-        <>
-        <div className="p-5 gap-5 flex">
-            <div>
-           <Link href="/sign-in"><Button className="cursor-pointer">Login</Button></Link> 
+const landingPage = () => {
+  return (
+    <>
+      <main className="h-full overflow-auto bg-[#111827]">
+        <div className="mx-auto h-full w-full ">
+          <LandingNavbar />
+          <LandingBanner/>
+          <LandingFooter/>
         </div>
-        <div>
-           <Link href="/sign-up"><Button className="cursor-pointer">Register</Button></Link> 
-        </div>
-        <div className="button">unprotected</div>
-        </div>
-        </>
-    )
-}
+      </main>
+    </>
+  );
+};
 
 export default landingPage;

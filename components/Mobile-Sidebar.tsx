@@ -35,7 +35,7 @@ const MobileSidebar = ({ apiLimitCount = 0,isPro }: MobileSidebarProps) => {
                 <SheetTitle className="sr-only">Main Navigation</SheetTitle>
                 
                 
-                <Sidebar apiLimitCount={apiLimitCount} />
+                <Sidebar apiLimitCount={apiLimitCount} isPro={isPro} />
                 
             </SheetContent>
         </Sheet>
