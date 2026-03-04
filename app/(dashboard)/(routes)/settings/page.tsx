@@ -1,8 +1,19 @@
 "use client"
 
+import { Heading } from "@/components/Heading"
+import { Settings} from "lucide-react"
+
 const settings=()=>{
     return(
-        <p>Settings.</p>
+        <div>
+            <Heading
+        title="Settings"
+        description=""
+        icon={Settings}
+        iconColor="text-pink-800"
+        bgColor="bg-pink-500/10"
+      />
+        </div>
     )
 }
 export default settings
